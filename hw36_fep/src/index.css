@@ -1,0 +1,31 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  max-width: 1440px;
+  min-width: 375px;
+  margin: 0 auto;
+  padding: 0 30px;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+}
+
+body {
+  background-color: rgb(225, 199, 181);
+}
+
+main {
+  text-align: center;
+}
+
+h1 {
+  font-size: 40px;
+}

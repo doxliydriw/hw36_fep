@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   createBrowserRouter,
@@ -17,13 +18,48 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 function App() {
-              const [dbResult, setDbresult] = useState([]);
-              
+  const [dbResult, setDbresult] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+// Geting data from API
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users ')
-      .then(response => response.json())
-      .then(data => setDbresult(data))
-  }, []);
+  const fetchData = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    const data = await response.json();
+    setDbresult(sortedList(data));
+// Loading fetched data to state using func loadListToState()
+    loadListToState();
+  };
+    fetchData().then(() => setLoaded(true))
+// Trigger the render when data is "loaded".
+  }, [loaded]);
+  
+// Action to  trigger the LOADING of the data to state
+  const SET_LIST = "SET_LIST";
+  const SetList = (array) => {
+                            return {
+                            type: SET_LIST,
+                            payload: array
+                            };
+  };
+
+// Function to load fetched data to state
+  const loadListToState = () => {
+                              dispatch(SetList(dbResult))
+  }
+  
+  const dispatch = useDispatch();
+  const list = useSelector(state => state.list)
+
+//Function to sort the list before rendering it:
+  const sortedList = (array) => {
+    console.log('we are sorting')
+        return array.sort(function (a, b) {
+            let nameA = a.name.toLowerCase();
+            let nameB = b.name.toLowerCase();
+            return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
+        });
+  };
+  
 
   function deleteEntry(id) {
     console.log('deleteing ', id);
@@ -47,7 +83,6 @@ function App() {
       ...values,
       id: uuidv4(),
     }
-    // console.log(newEntry);
     return setDbresult([...dbResult, newEntry]);
   }
 
@@ -63,23 +98,15 @@ function App() {
                                 },
                                 {
                                   path: "/list",
-                                  element: <EntryList
-                                    dbResult={dbResult}
-                                    deleteEntry={deleteEntry}
-                                            />,
+                                  element: <EntryList/>,
                                 },
                                 {
                                   path: "/form",
-                                  element: <EntryForm  
-                                  addEntry={addEntry}/>,
+                                  element: <EntryForm/>,
                                 },
                                 {
                                   path: "/edit",
-                                  element: <EditForm
-                                    deleteEntry={deleteEntry}
-                                    addEntry={addEntry}
-                                    editEntry={editEntry}
-                                    />,
+                                  element: <EditForm/>,
                                 },
                               ]
                 },

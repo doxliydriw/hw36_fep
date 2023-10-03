@@ -7,7 +7,7 @@ function Nav() {
             <nav className='navBox'>
                 <ul className='navList'>
                     <li><NavLink to='/'>home</NavLink></li>
-                    <li><NavLink to='/list'>list of enrtie</NavLink></li>
+                    <li><NavLink to='/list'>list of enrties</NavLink></li>
                     <li><NavLink to='/form'>add new entry form</NavLink></li>
                 </ul>
             </nav>

@@ -1,9 +1,30 @@
 import React from 'react'
 import '../components/Modal.css'
+import { useDispatch, useSelector } from 'react-redux';
 
-function Modal({setOpenModal, deleteEntry, entry}) {
-    // console.log(entry);
-    // () => props.deleteEntry(props.entry.id)
+function Modal({ setOpenModal, entry }) {
+    const list = useSelector(state => state.list)
+    const dispatch = useDispatch();
+
+//Action to  trigger the DELETE of the enrty from state
+    const DELETE_ENTRY = "DELETE_ENTRY"
+    const DeleteEntry = (array) => {
+                            return {
+                            type: DELETE_ENTRY,
+                            payload: array
+                            };
+    };
+    const DeleteEntryFromState = (entry) => {
+                              dispatch(DeleteEntry(entry))
+  }
+    
+    function deleteEntry(entry) {
+    console.log('deleteing ', entry.name);
+        const updatedList = list.filter((entry) => entry !== entry);
+        return updatedList;
+  };
+
+
     const confirmDelete = (entry) => {
         deleteEntry(entry);
         setOpenModal(false);
@@ -21,7 +42,7 @@ function Modal({setOpenModal, deleteEntry, entry}) {
                     <p>entry <strong>{entry.name}</strong> will be deleted permanetly</p>
                 </div>
                 <div className='footer'>
-                    <button className='modalConfirm' onClick={() => confirmDelete(entry.id)}>yes</button>
+                    <button className='modalConfirm' onClick={DeleteEntryFromState}>yes</button>
                     <button className='modalCancel' onClick={() => setOpenModal(false)} id='cancelBtn'>no</button>
                 </div>
             </div>

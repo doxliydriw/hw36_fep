@@ -1,29 +1,31 @@
 import { useState } from "react"
 import Modal from "./modal"
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-function Entry(props) {
-                        const navigate = useNavigate();
-                        const [OpenModal, setOpenModal] = useState(false)
+function Entry(entry) {
+    entry = entry.entry;
+    const list = useSelector(state => state.list)
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+        const [OpenModal, setOpenModal] = useState(false)
 
     function HandleEditClick() {
-                                navigate('/edit', { state: props.entry})
+                                navigate('/edit', { state: entry})
                             };
                             
     return (
         <div className="card">
             {OpenModal && <Modal
                                     setOpenModal={setOpenModal}
-                                    deleteEntry={props.deleteEntry}
-                                    entry={props.entry}
-                                    // target={props.target}
+                                    entry={entry}
                                      />}
             <div className="cardBox">
                 <ul className="cardList">
-                    <li className="cardId"{...props.listId}>{props.listId}</li>
-                    <li>Name: {props.entry.name}</li>
-                    {/* <li>{props.entry.email}</li> */}
-                    <li>phone: {props.entry.phone}</li>
+                    <li className="cardId">{list.indexOf(entry)+1}</li>
+                    <li>Name: {entry.name}</li>
+                    <li>phone: {entry.phone}</li>
                 </ul>
                 <div className="cardFooter">
                     <button className="deleteBtn smallBtn" onClick={() => {

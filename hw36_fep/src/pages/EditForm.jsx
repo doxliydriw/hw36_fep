@@ -1,29 +1,53 @@
 import { useFormik } from 'formik';
-import { React, useState } from 'react';
+import { React } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import EntryList from './EntryLlst';
+import { useDispatch, useSelector } from 'react-redux';
+import { sortedList } from '../store';
  
-function EditForm(props) {
-    console.log(props.editEntry);
+function EditForm() {
     let entry = useLocation().state;
     const navigate = useNavigate();
+    const list = useSelector(state => state.list)
+    const dispatch = useDispatch();
+
+    
+//Action to  trigger the DELETE of the enrty from state
+    const UPDATE_ENTRY = "UPDATE_ENTRY"
+    const EditEntry = (array) => {
+                                    return {
+                                                type: UPDATE_ENTRY,
+                                                payload: array
+                                            };
+                                    };
+
+//Dispatcher to update the list in state with target entry EDITED
+    const EditEntryInState = (entry) => {
+                                            dispatch(EditEntry(EditEntryInList(entry)))
+                                        }
+    
+//Form list of entris with EDITED entry
+    function EditEntryInList(entry) {
+        const updatedList = list.filter((el) => el.id !== entry.id);
+        updatedList.push(entry);
+        return sortedList(updatedList);
+  };
+    
     const formik = useFormik({
-     initialValues: {
-                    name: entry.name,
-                    phone: entry.phone,
-                    id: entry.id,
-    },
-        onSubmit: (values) => {
-        //  console.log(values)
-            if (values.name && values.phone) {
-                props.editEntry(values);
-                // props.deleteEntry(values.id);
-                                        navigate('/list');
-        } else {
-         alert('Please enter all mandatory data');
-        }
-     },
-   });
+                                initialValues: {
+                                                    name: entry.name,
+                                                    phone: entry.phone,
+                                                    id: entry.id,
+                                                },
+                                onSubmit: (values) => {
+                                                            if (values.name && values.phone) {
+                                                                        EditEntryInState(values);
+                                                                        navigate('/list');
+                                                                    } else {
+                                                                            alert('Please enter all mandatory data');
+                                                                            }
+                                                        },
+                            });
+    
     return (
          <>
             <h1>Edit entry {entry.name}</h1>
@@ -53,7 +77,7 @@ function EditForm(props) {
                 </ul>
           </div>
           <button className="submit" type="submit">Submit</button>
-          <button className='cancel'><NavLink to='/'>cancel</NavLink></button>
+          <button className='cancel'><NavLink to='/list'>cancel</NavLink></button>
         </form>
         </>
    );

@@ -1,5 +1,13 @@
 import { createStore } from 'redux'
 
+export function sortedList(array) {
+    console.log('we are sorting')
+    return array.sort(function (a, b) {
+        let nameA = a.name.toLowerCase();
+        let nameB = b.name.toLowerCase();
+        return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
+    });
+};
 
 const initialState = {
     list: []

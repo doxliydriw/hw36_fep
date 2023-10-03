@@ -14,21 +14,25 @@ function Modal({ setOpenModal, entry }) {
                             payload: array
                             };
     };
+
+//Dispatcher to update the list in state with target entry DELETED
     const DeleteEntryFromState = (entry) => {
-                              dispatch(DeleteEntry(entry))
+                              dispatch(DeleteEntry(DeleteEntryFromList(entry)))
   }
     
-    function deleteEntry(entry) {
-    console.log('deleteing ', entry.name);
-        const updatedList = list.filter((entry) => entry !== entry);
+//Form list of entris with deleted entry
+    function DeleteEntryFromList (entry) {
+        const updatedList = list.filter((el) => el !== entry);
         return updatedList;
   };
 
-
+//Confirm delete click handler
     const confirmDelete = (entry) => {
-        deleteEntry(entry);
+        DeleteEntryFromState(entry);
         setOpenModal(false);
+
     }
+
     return (
         <div className='modalBackground'>
             <div className='modalCntr'>
@@ -42,7 +46,7 @@ function Modal({ setOpenModal, entry }) {
                     <p>entry <strong>{entry.name}</strong> will be deleted permanetly</p>
                 </div>
                 <div className='footer'>
-                    <button className='modalConfirm' onClick={DeleteEntryFromState}>yes</button>
+                    <button className='modalConfirm' onClick={() => confirmDelete(entry)}>yes</button>
                     <button className='modalCancel' onClick={() => setOpenModal(false)} id='cancelBtn'>no</button>
                 </div>
             </div>

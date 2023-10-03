@@ -9,7 +9,7 @@ function Entry(entry) {
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
-        const [OpenModal, setOpenModal] = useState(false)
+    const [OpenModal, setOpenModal] = useState(false)
 
     function HandleEditClick() {
                                 navigate('/edit', { state: entry})
